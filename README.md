@@ -20,9 +20,9 @@ The tar file must be located in the working directory, and is directly accessed 
 
 # Usage
 Launch mipsboot as follows:
-
-   `python mipsboot.py address`
-   
+```
+python mipsboot.py address
+``` 
 where:
 
    `address` is the IP address to which the utility will bind and listen for BFS, BOOTP, TFTP and r-command connections and requests.
