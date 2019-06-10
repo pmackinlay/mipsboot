@@ -25,6 +25,6 @@ python mipsboot.py address
 ``` 
 where:
 
-   `address` is the IP address to which the utility will bind and listen for BFS, BOOTP, TFTP and r-command connections and requests.
+   `address` is the IP address to which `mipsboot` will bind and listen for connections and requests.
 
 `mipsboot` requires read/write access to its working directory and produces some diagnostic output to the console.
