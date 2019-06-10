@@ -67,14 +67,15 @@ class TFTP:
 
             # open the file and read the data
             with tarfile.open('riscos_4.52_netinstall.tar', 'r') as netinstall:
-                with netinstall.extractfile('tftpboot/' + params[0]) as f:
-                    self.data = f.read()
+                f = netinstall.extractfile('tftpboot/' + params[0])
+                self.data = f.read()
+                f.close()
 
-                    # dynamically patch sash binary to use .255 broadcast address
-                    if os.path.basename(params[0]) == 'sash.2030':
-                        self.data = self.data[:0x15d90] + '\x24\x06\xff\xff' + self.data[0x15d94:]
-                    elif os.path.basename(params[0]) == 'sash.std':
-                        self.data = self.data[:0x293e4] + '\x24\x06\xff\xff' + self.data[0x293e8:]
+                # dynamically patch sash binary to use .255 broadcast address
+                if os.path.basename(params[0]) == 'sash.2030':
+                    self.data = self.data[:0x15d90] + '\x24\x06\xff\xff' + self.data[0x15d94:]
+                elif os.path.basename(params[0]) == 'sash.std':
+                    self.data = self.data[:0x293e4] + '\x24\x06\xff\xff' + self.data[0x293e8:]
 
             # send the first block
             response = struct.pack('!2H', self.TFTP_DATA, 1) + self.data[0:self.TFTP_BLOCK]
@@ -141,14 +142,15 @@ class BFS:
 
             # open the file and read the data
             with tarfile.open('riscos_4.52_netinstall.tar', 'r') as netinstall:
-                with netinstall.extractfile('tftpboot/' + bfs_filename) as f:
-                    self.data = f.read()
+                f = netinstall.extractfile('tftpboot/' + bfs_filename)
+                self.data = f.read()
+                f.close()
 
-                    # dynamically patch sash binary to use .255 broadcast address
-                    if os.path.basename(bfs_filename) == 'sash.2030':
-                        self.data = self.data[:0x15d90] + '\x24\x06\xff\xff' + self.data[0x15d94:]
-                    elif os.path.basename(bfs_filename) == 'sash.std':
-                        self.data = self.data[:0x293e4] + '\x24\x06\xff\xff' + self.data[0x293e8:]
+                # dynamically patch sash binary to use .255 broadcast address
+                if os.path.basename(bfs_filename) == 'sash.2030':
+                    self.data = self.data[:0x15d90] + '\x24\x06\xff\xff' + self.data[0x15d94:]
+                elif os.path.basename(bfs_filename) == 'sash.std':
+                    self.data = self.data[:0x293e4] + '\x24\x06\xff\xff' + self.data[0x293e8:]
 
             # send enquiry response
             response = struct.pack('!2B3H2L16s', bfs_rev, 2, len(bfs_filename) + 1, 0, 0, 0, 0, socket.gethostname()) + bfs_filename + '\0'
